@@ -26,9 +26,9 @@ class TaskController extends Controller
         $task_columns = array_keys($task_item->first()->getAttributes());
 
         if (empty($sortColumn) and empty($sortOrder)) {
-            $tasks = Task::all();
+            $tasks = Task::paginate(15);
         } else {
-            $tasks = Task::orderBy($sortColumn, $sortOrder)->get();
+            $tasks = Task::orderBy($sortColumn, $sortOrder)->paginate(15);
         }
 
         $select_array = $task_columns;

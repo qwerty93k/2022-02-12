@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     {{--SORT--}}
-    <form method="GET" action="{{route('task.index')}}">
+    <form method="GET" action="{{route('task.index')}}" >
         @csrf
         <select name="sortColumn">
             @foreach ($select_array as $key => $item)
@@ -23,7 +23,7 @@
                 <option value="desc" selected>Descending</option>
             @endif
         </select>
-        <button type="submit">Sort</button>
+        <button type="submit" class="btn btn-primary">Sort</button>
     </form>
     {{--FILTER--}}
     <form method="GET" action="{{route('task.indexfilter')}}">
@@ -33,9 +33,9 @@
             <option value="{{$taskstatus->id}}">{{$taskstatus->title}}</option>
         @endforeach
     </select>
-    <button type="submit">Filter</button>
+    <button type="submit" class="btn btn-primary">Filter</button>
     
-    <a href="{{route('task.index')}}" class="" type="submit">Clear Filter</a>
+    <a href="{{route('task.index')}}" class="btn btn-secondary" type="submit">Clear Filter</a>
 
     <table class="table table-striped">
         <tr>
@@ -54,5 +54,6 @@
         </tr>
         @endforeach
     </table>
+    {{$tasks->links()}}
 </div>
 @endsection

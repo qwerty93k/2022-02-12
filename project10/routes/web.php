@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,3 +21,12 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::prefix('task')->group(function () {
+    Route::get('', 'App\Http\Controllers\TaskController@index')->name('task.index');
+    //Route::get('bookfilter', 'App\Http\Controllers\BookController@bookfilter')->name('book.bookfilter');
+    //Route::get('indexpagination', 'App\Http\Controllers\BookController@indexpagination')->name('book.indexpagination');
+    //Route::get('indexsortfilter', 'App\Http\Controllers\BookController@indexsortfilter')->name('book.indexsortfilter');
+    //Route::get('indexsortable', 'App\Http\Controllers\BookController@indexsortable')->name('book.indexsortable');
+    //Route::get('search', 'App\Http\Controllers\AuthorController@search')->name('author.search');
+});

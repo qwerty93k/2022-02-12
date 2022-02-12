@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\PaginationSetting;
+use App\Models\TaskStatus;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -18,23 +20,25 @@ class TaskController extends Controller
     {
         $sortColumn = $request->sortColumn;
         $sortOrder = $request->sortOrder;
+        $taskstatuses = TaskStatus::orderBy('id', 'asc')->get();
 
         $task_item = Task::all();
         $task_columns = array_keys($task_item->first()->getAttributes());
 
         if (empty($sortColumn) and empty($sortOrder)) {
-            $task = Task::all();
+            $tasks = Task::all();
         } else {
-            $task = Task::orderBy($sortColumn, $sortOrder)->get();
+            $tasks = Task::orderBy($sortColumn, $sortOrder)->get();
         }
 
         $select_array = $task_columns;
 
         return view('task.index', [
-            'tasks' => $task,
+            'tasks' => $tasks,
             'sortColumn' => $sortColumn,
             'sortOrder' => $sortOrder,
-            'select_array' => $select_array
+            'select_array' => $select_array,
+            'taskstatuses' => $taskstatuses
         ]);
     }
 
@@ -102,5 +106,13 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         //
+    }
+
+    public function indexFilter(Request $request)
+    {
+        $status_id = $request->status_id;
+        $taskstatuses = TaskStatus::orderBy('id', 'asc')->get();
+        $tasks = Task::where('status_id', '=', $status_id)->get();
+        return view('task.indexfilter', ['tasks' => $tasks, 'taskstatuses' => $taskstatuses]);
     }
 }

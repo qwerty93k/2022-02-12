@@ -25,6 +25,16 @@
         </select>
         <button type="submit">Sort</button>
     </form>
+    {{--FILTER--}}
+    <form method="GET" action="{{route('task.indexfilter')}}">
+        @csrf
+        <select name="status_id">
+        @foreach ($taskstatuses as $taskstatus)
+            <option value="{{$taskstatus->id}}">{{$taskstatus->title}}</option>
+        @endforeach
+    </select>
+    <button type="submit">Filter</button>
+    
     <a href="{{route('task.index')}}" class="" type="submit">Clear Filter</a>
 
     <table class="table table-striped">

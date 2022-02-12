@@ -16,9 +16,26 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        $tasks = Task::all();
+        $sortColumn = $request->sortColumn;
+        $sortOrder = $request->sortOrder;
 
-        return view('task.index', ['tasks' => $tasks]);
+        $task_item = Task::all();
+        $task_columns = array_keys($task_item->first()->getAttributes());
+
+        if (empty($sortColumn) and empty($sortOrder)) {
+            $task = Task::all();
+        } else {
+            $task = Task::orderBy($sortColumn, $sortOrder)->get();
+        }
+
+        $select_array = $task_columns;
+
+        return view('task.index', [
+            'tasks' => $task,
+            'sortColumn' => $sortColumn,
+            'sortOrder' => $sortOrder,
+            'select_array' => $select_array
+        ]);
     }
 
     /**

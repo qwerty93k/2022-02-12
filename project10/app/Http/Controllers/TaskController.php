@@ -22,13 +22,20 @@ class TaskController extends Controller
         $sortOrder = $request->sortOrder;
         $taskstatuses = TaskStatus::orderBy('id', 'asc')->get();
 
+        $page_limit = $request->page_limit;
+        $paginationSettings = PaginationSetting::where('visible', '=', 1)->get();
+
         $task_item = Task::all();
         $task_columns = array_keys($task_item->first()->getAttributes());
 
         if (empty($sortColumn) and empty($sortOrder)) {
-            $tasks = Task::paginate(15);
+            $tasks = Task::paginate($page_limit);
         } else {
-            $tasks = Task::orderBy($sortColumn, $sortOrder)->paginate(15);
+            if ($page_limit == 1) {
+                $tasks = Task::orderBy($sortColumn, $sortOrder)->get();
+            } else {
+                $tasks = Task::orderBy($sortColumn, $sortOrder)->paginate($page_limit);
+            }
         }
 
         $select_array = $task_columns;
@@ -38,7 +45,9 @@ class TaskController extends Controller
             'sortColumn' => $sortColumn,
             'sortOrder' => $sortOrder,
             'select_array' => $select_array,
-            'taskstatuses' => $taskstatuses
+            'taskstatuses' => $taskstatuses,
+            'paginationSettings' => $paginationSettings,
+            'page_limit' => $page_limit
         ]);
     }
 
@@ -112,7 +121,16 @@ class TaskController extends Controller
     {
         $status_id = $request->status_id;
         $taskstatuses = TaskStatus::orderBy('id', 'asc')->get();
-        $tasks = Task::where('status_id', '=', $status_id)->paginate(15);
-        return view('task.indexfilter', ['tasks' => $tasks, 'taskstatuses' => $taskstatuses]);
+
+        $page_limit = $request->page_limit;
+        $paginationSettings = PaginationSetting::where('visible', '=', 1)->get();
+
+        $tasks = Task::where('status_id', '=', $status_id)->paginate($page_limit);
+        return view('task.indexfilter', [
+            'tasks' => $tasks,
+            'taskstatuses' => $taskstatuses,
+            'paginationSettings' => $paginationSettings,
+            'page_limit' => $page_limit
+        ]);
     }
 }

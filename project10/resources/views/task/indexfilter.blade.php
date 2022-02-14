@@ -20,5 +20,6 @@
         </tr>
         @endforeach
     </table>
+    {!!$tasks->appends(Request::except('page'))->render()!!}
 </div>
 @endsection

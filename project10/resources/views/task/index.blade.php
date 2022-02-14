@@ -54,6 +54,6 @@
         </tr>
         @endforeach
     </table>
-    {{$tasks->links()}}
+    {!!$tasks->appends(Request::except('page'))->render()!!}
 </div>
 @endsection

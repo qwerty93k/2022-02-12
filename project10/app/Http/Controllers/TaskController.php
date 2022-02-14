@@ -112,7 +112,7 @@ class TaskController extends Controller
     {
         $status_id = $request->status_id;
         $taskstatuses = TaskStatus::orderBy('id', 'asc')->get();
-        $tasks = Task::where('status_id', '=', $status_id)->get();
+        $tasks = Task::where('status_id', '=', $status_id)->paginate(15);
         return view('task.indexfilter', ['tasks' => $tasks, 'taskstatuses' => $taskstatuses]);
     }
 }

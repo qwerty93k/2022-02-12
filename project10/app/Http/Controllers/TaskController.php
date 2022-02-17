@@ -133,4 +133,13 @@ class TaskController extends Controller
             'page_limit' => $page_limit
         ]);
     }
+
+    public function indexSortable(Request $request)
+    {
+        $tasks = Task::sortable()->paginate(15);
+
+        return view('task.indexsortable', [
+            'tasks' => $tasks
+        ]);
+    }
 }
